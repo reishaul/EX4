@@ -1,7 +1,12 @@
+//reishaul1@gmail.com
 #pragma once//same as #ifndef and #define
-#include "MyContainer.hpp"
 
-namespace Rei{
+#include "MyContainer.hpp"
+#include <iterator>
+#include <stdexcept>
+
+namespace Rei {
+
 template <typename T>
 class MyContainer;
 
@@ -10,12 +15,12 @@ template <typename T>
 // SideCrossOrder Iterator
 class MyContainer<T>::SideCrossOrderIterator {
 private:
-    vector<T> helper;
+    std::vector<T> helper;// Helper vector to store the side-cross order elements
     size_t index;
 
 public:
-    SideCrossOrderIterator(const vector<T>& data, bool end = false){
-        vector<T> sorted_data = data;
+    SideCrossOrderIterator(const std::vector<T>& data, bool end = false){
+        std::vector<T> sorted_data = data;
         std::sort(sorted_data.begin(), sorted_data.end());//first sort the data
 
         size_t left = 0;
@@ -39,16 +44,41 @@ public:
     }
     
     const T& operator*() const {
+        if (index >= helper.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         return helper[index];
     }
 
+    const T* operator->() const {
+        if (index >= helper.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
+        return &helper[index];
+    }
+
+
+
     SideCrossOrderIterator& operator++() {
-        index++;
+        if(index < helper.size()) {
+            ++index;
+        } 
         return *this;
     }
 
-    bool operator!=(const SideCrossOrderIterator& other) const {
-        return index != other.index;
+    SideCrossOrderIterator operator++(int) {
+        SideCrossOrderIterator temp = *this;
+        ++(*this);
+        return temp;
     }
+
+    bool operator!=(const SideCrossOrderIterator& other) const {
+        return !(*this == other);
+    }
+
+    bool operator==(const SideCrossOrderIterator& other) const {
+        return (helper == other.helper) && (index == other.index);
+    }
+
 };
 }

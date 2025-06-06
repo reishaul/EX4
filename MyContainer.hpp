@@ -1,13 +1,13 @@
 //reishaul1@gmail.com
+
 #ifndef MYCONTAINER_HPP
 #define MYCONTAINER_HPP
+
 #include <vector>
 #include <algorithm>
 #include <iostream>
 #include <stdexcept>
 #include <cstddef>
-
-//using std::ostream_iterator;
 
 
 namespace Rei {
@@ -23,6 +23,16 @@ namespace Rei {
         MyContainer()=default;
         ~MyContainer()=default;
 
+        // Copy constructor and assignment operator
+        MyContainer(const MyContainer& other) = default;
+        MyContainer& operator=(const MyContainer& other) = default;
+
+         // Move constructor and assignment operator
+        // MyContainer(MyContainer&& other) noexcept = default;
+        // MyContainer& operator=(MyContainer&& other) noexcept = default;
+
+
+
         void addElement(const T& value) {data.push_back(value);}
 
         void removeElement(const T& value) {
@@ -31,14 +41,31 @@ namespace Rei {
             data.erase(std::remove(data.begin(), data.end(), value), data.end());
 
             if(data.size() == size_) {
-                cout << "Value not found in the container" << endl;
+                throw std::invalid_argument("Element not found in the container");
             }
         }
 
 
         size_t size() const {return data.size();}
 
-        void print(ostream& os=cout) const {
+        // Check if container is empty
+        bool empty() const {
+            return data.empty();
+        }
+        
+        // Clear all elements
+        void clear() {
+            data.clear();
+        }
+
+        // Access element by index (without bounds checking)
+        const T& operator[](size_t index) const {
+            return data[index];
+        }
+
+
+
+        void print(std::ostream& os=std::cout) const {
             os<<"[";
             for (size_t i = 0; i < data.size(); ++i) {
                 os << data[i];
@@ -57,9 +84,9 @@ namespace Rei {
         }
 
         class AscendingIterator;
+        class DescendingIterator;
         class SideCrossOrderIterator;
         class ReverseOrderIterator;
-        class DescendingIterator;
         class MiddleOutOrderIterator;
         class OrderIterator;
 
@@ -71,7 +98,7 @@ namespace Rei {
             return AscendingIterator(data, true);
         }
 
-
+        
         DescendingIterator begin_descending_order() const {
             return DescendingIterator(data, false);
         }
@@ -81,8 +108,6 @@ namespace Rei {
             return DescendingIterator(data, true);
         }
 
-
-
         SideCrossOrderIterator begin_side_cross_order() const {
             return SideCrossOrderIterator(data, false);
         }
@@ -91,7 +116,7 @@ namespace Rei {
             return SideCrossOrderIterator(data, true);
         }
 
-
+        
 
         ReverseOrderIterator begin_reverse_order() const {
             return ReverseOrderIterator(data, false);
@@ -101,7 +126,6 @@ namespace Rei {
             return ReverseOrderIterator(data, true);
         }
 
-
         OrderIterator begin_order() const {
             return OrderIterator(data, false);
         }
@@ -110,8 +134,6 @@ namespace Rei {
             return OrderIterator(data, true);
         }
 
-
-
         MiddleOutOrderIterator begin_middle_out_order() const {
             return MiddleOutOrderIterator(data, false);
         }
@@ -119,13 +141,24 @@ namespace Rei {
         MiddleOutOrderIterator end_middle_out_order() const {
             return MiddleOutOrderIterator(data, true);
         }
+
+
+
+        // Standard begin/end for range-based for loops
+        auto begin() const { return data.begin(); }
+        auto end() const { return data.end(); }
+        
+        // Get reference to underlying data (for iterator implementations)
+        const std::vector<T>& getData() const { return data; }
+
+
     };
 
 }
 
 // Iterator typedefs
 #include "AscendingIterator.hpp"
-#include "DescendingOrderIterator.hpp"
+#include "DescendingIterator.hpp"
 #include "OrderIterator.hpp"
 #include "SideCrossOrderIterator.hpp"
 #include "MiddleOutOrderIterator.hpp"
