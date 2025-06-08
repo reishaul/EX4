@@ -43,6 +43,9 @@ public:
 
 
     AscendingIterator& operator++() {
+        if(index >= sorted.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         if (index < sorted.size()) {
             ++index;
         }
@@ -50,9 +53,23 @@ public:
     }
 
     AscendingIterator operator++(int) {
+        if(index >= sorted.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
+         // Create a copy of the current iterator
+         // and then increment the current iterator
+         // to return the old value
         AscendingIterator temp = *this;
         ++(*this);
         return temp;
+    }
+
+    AscendingIterator& operator--() {
+        if (index == 0) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        --index;
+        return *this;
     }
 
     bool operator!=(const AscendingIterator& other) const {
@@ -63,13 +80,6 @@ public:
     return (sorted == other.sorted) && (index == other.index);
     }
 
-
-    // // Iterator traits (for compatibility with STL algorithms)
-    // using iterator_category = std::forward_iterator_tag;
-    // using value_type = T;
-    // using difference_type = std::ptrdiff_t;
-    // using pointer = const T*;
-    // using reference = const T&;
 };
 
 }

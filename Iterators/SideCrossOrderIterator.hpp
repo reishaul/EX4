@@ -1,7 +1,7 @@
 //reishaul1@gmail.com
 #pragma once//same as #ifndef and #define
 
-#include "MyContainer.hpp"
+#include "../MyContainer.hpp"
 #include <iterator>
 #include <stdexcept>
 
@@ -13,7 +13,7 @@ class MyContainer;
 template <typename T>
 
 // SideCrossOrder Iterator
-class MyContainer<T>::SideCrossOrderIterator {
+class MyContainer<T>::SideCrossOrderIterator {//nested class to MyContainer
 private:
     std::vector<T> helper;// Helper vector to store the side-cross order elements
     size_t index;
@@ -60,13 +60,28 @@ public:
 
 
     SideCrossOrderIterator& operator++() {
+        if (index >= helper.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
+        // Increment the index only if it's less than the size of the helper vector
+        // This prevents out-of-bounds access
         if(index < helper.size()) {
             ++index;
         } 
         return *this;
     }
+    SideCrossOrderIterator& operator--() {
+        if (index == 0) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        --index;
+        return *this;
+    }
 
     SideCrossOrderIterator operator++(int) {
+        if (index >= helper.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         SideCrossOrderIterator temp = *this;
         ++(*this);
         return temp;

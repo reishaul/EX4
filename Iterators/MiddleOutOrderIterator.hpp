@@ -2,7 +2,7 @@
 #ifndef MIDDLE_OUT_ORDER_ITERATOR_HPP
 #define MIDDLE_OUT_ORDER_ITERATOR_HPP
 
-#include "MyContainer.hpp"
+#include "../MyContainer.hpp"
 #include <iterator>
 #include <stdexcept>
 
@@ -61,11 +61,25 @@ public:
     }
 
     MiddleOutOrderIterator& operator++() {
+        if (move >= data.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         move++;
         return *this;
     }
 
+    MiddleOutOrderIterator& operator--() {
+        if (move == 0) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        move--;
+        return *this;
+    }
+
     MiddleOutOrderIterator operator++(int){
+        if (move >= data.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         MiddleOutOrderIterator tmp=*this;
         ++(*this);
         return tmp;

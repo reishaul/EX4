@@ -1,20 +1,23 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra
 
-TARGET = demo
-SRC = Demo.cpp
-OBJ = $(SRC:.cpp=.o)
+all: demo tests
 
-all: $(TARGET)
+demo: Demo.cpp
+	$(CXX) $(CXXFLAGS) -o demo Demo.cpp
 
-$(TARGET): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+tests: tests.cpp
+	$(CXX) $(CXXFLAGS) -o tests tests.cpp	
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+Main: demo
+	./demo
 
-Main: $(TARGET)
-	./$(TARGET)
+test: tests
+	./tests
+
+valgrind: tests
+	valgrind --leak-check=full --track-origins=yes ./tests
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f demo tests
+.PHONY: all Main tests clean

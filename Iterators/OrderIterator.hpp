@@ -2,7 +2,7 @@
 #ifndef ORDER_ITERATOR_HPP
 #define ORDER_ITERATOR_HPP
 
-#include "MyContainer.hpp"
+#include "../MyContainer.hpp"
 #include <iterator>
 #include <stdexcept>
 
@@ -35,11 +35,27 @@ public:
 
 
     OrderIterator& operator++() {
+        if (index >= data.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         index++;
         return *this;
     }
 
+    OrderIterator& operator--() {
+        if (index == 0) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        --index;
+        return *this;
+    }
+
     OrderIterator operator++(int) {
+        if (index >= data.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
+        // Create a copy of the current iterator
+        // and then increment the current iterator
         OrderIterator temp = *this;
         ++(*this);
         return temp;

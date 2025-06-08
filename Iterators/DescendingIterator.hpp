@@ -1,6 +1,6 @@
 //reishaul1@gmail.com
 #pragma once
-#include "MyContainer.hpp"
+#include "../MyContainer.hpp"
 #include <stdexcept>
 #include <iterator>
 
@@ -39,11 +39,25 @@ public:
     }
 
     DescendingIterator& operator++() {
+        if (index >= sorted.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         ++index;
         return *this;
     }
 
+    DescendingIterator& operator--() {
+        if (index == 0) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        --index;
+        return *this;
+    }
+
     DescendingIterator operator++(int) {
+        if (index >= sorted.size()) {
+            throw std::out_of_range("Iterator is out of range");
+        }
         DescendingIterator temp = *this;
         ++(*this);
         return temp;

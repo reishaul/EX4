@@ -157,12 +157,12 @@ namespace Rei {
 }
 
 // Iterator typedefs
-#include "AscendingIterator.hpp"
-#include "DescendingIterator.hpp"
-#include "OrderIterator.hpp"
-#include "SideCrossOrderIterator.hpp"
-#include "MiddleOutOrderIterator.hpp"
-#include "ReverseOrderIterator.hpp"
+#include "Iterators/AscendingIterator.hpp"
+#include "Iterators/DescendingIterator.hpp"
+#include "Iterators/OrderIterator.hpp"
+#include "Iterators/SideCrossOrderIterator.hpp"
+#include "Iterators/MiddleOutOrderIterator.hpp"
+#include "Iterators/ReverseOrderIterator.hpp"
 
 
 #endif // MYCONTAINER_HPP

@@ -2,7 +2,7 @@
 #ifndef REVERSE_ORDER_ITERATOR_HPP
 #define REVERSE_ORDER_ITERATOR_HPP
 
-#include "MyContainer.hpp"
+#include "../MyContainer.hpp"
 #include <iterator>
 #include <stdexcept>
 
@@ -53,8 +53,22 @@ public:
         }
         return *this;
     }
+    ReverseOrderIterator& operator--() {
+        if (index >= data.size()) {
+            throw std::out_of_range("Cannot decrement iterator before the beginning");
+        }
+        ++index;
+        return *this;
+    }
 
     ReverseOrderIterator operator++(int) {
+        if (index == 0) {
+            index = data.size();
+        } else {
+            --index;
+        }
+        // Create a copy of the current iterator
+        // and then increment the current iterator
         ReverseOrderIterator temp = *this;
         ++(*this);
         return temp;
